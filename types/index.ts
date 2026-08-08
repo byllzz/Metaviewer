@@ -32,6 +32,31 @@ export interface ImageInfo {
   contentType?: string;
 }
 
+export interface SecurityHeaders {
+  hsts: boolean;
+  xContentTypeOptions: boolean;
+  xFrameOptions: boolean;
+  csp: boolean;
+}
+
+export interface RobotsTxtInfo {
+  checked: boolean;
+  found: boolean;
+  allowsIndexing: boolean;
+}
+
+export interface SitemapInfo {
+  checked: boolean;
+  found: boolean;
+  urlCount?: number;
+}
+
+export interface RawTag {
+  type: "title" | "meta" | "link" | "og" | "twitter";
+  name: string;
+  value: string;
+}
+
 export interface ExtractedMeta {
   url: string;
   finalUrl: string;
@@ -39,16 +64,30 @@ export interface ExtractedMeta {
   description?: string;
   canonical?: string;
   favicon?: string;
+  appleTouchIcon?: string;
   themeColor?: string;
   robots?: string;
   lang?: string;
   viewport?: string;
   charset?: string;
+  author?: string;
+  keywords?: string;
+  generator?: string;
 
   og: Record<string, string>;
   twitter: Record<string, string>;
 
   ogImage?: ImageInfo;
+
+  httpStatus: number;
+  loadTimeMs: number;
+  contentType?: string;
+  server?: string;
+  redirected: boolean;
+  securityHeaders: SecurityHeaders;
+  robotsTxt: RobotsTxtInfo;
+  sitemap: SitemapInfo;
+  rawTags: RawTag[];
 }
 
 export type Grade = "A" | "B" | "C" | "D" | "F";

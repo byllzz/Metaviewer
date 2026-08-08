@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import type { ExtractedMeta, ImageInfo } from "@/types";
+import type { ExtractedMeta, ImageInfo, RawTag, RobotsTxtInfo, SitemapInfo } from "@/types";
 
 const USER_AGENT =
   "Mozilla/5.0 (compatible; MetaviewBot/1.0; +https://metaview.app/bot)";
@@ -32,7 +32,7 @@ function isPrivateHost(hostname: string): boolean {
 
 async function fetchHead(url: string): Promise<ImageInfo | undefined> {
   try {
-    const res = await fetch(url, { method: "HEAD" });
+    const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(8000) });
     const contentType = res.headers.get("content-type") ?? undefined;
     const len = res.headers.get("content-length");
     return {
@@ -42,6 +42,36 @@ async function fetchHead(url: string): Promise<ImageInfo | undefined> {
     };
   } catch {
     return undefined;
+  }
+}
+
+async function checkRobotsTxt(origin: string): Promise<RobotsTxtInfo> {
+  try {
+    const res = await fetch(`${origin}/robots.txt`, {
+      signal: AbortSignal.timeout(6000),
+      headers: { "User-Agent": USER_AGENT },
+    });
+    if (!res.ok) return { checked: true, found: false, allowsIndexing: true };
+    const text = await res.text();
+    const blocksAll = /User-agent:\s*\*[\s\S]*?Disallow:\s*\/\s*(\r?\n|$)/i.test(text);
+    return { checked: true, found: true, allowsIndexing: !blocksAll };
+  } catch {
+    return { checked: true, found: false, allowsIndexing: true };
+  }
+}
+
+async function checkSitemap(origin: string): Promise<SitemapInfo> {
+  try {
+    const res = await fetch(`${origin}/sitemap.xml`, {
+      signal: AbortSignal.timeout(6000),
+      headers: { "User-Agent": USER_AGENT },
+    });
+    if (!res.ok) return { checked: true, found: false };
+    const text = await res.text();
+    const matches = text.match(/<loc>/g);
+    return { checked: true, found: true, urlCount: matches?.length ?? undefined };
+  } catch {
+    return { checked: true, found: false };
   }
 }
 
@@ -56,6 +86,7 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
   }
 
   let res: Response;
+  const startedAt = Date.now();
   try {
     res = await fetch(url, {
       headers: { "User-Agent": USER_AGENT, Accept: "text/html,*/*" },
@@ -69,6 +100,7 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
       })`
     );
   }
+  const loadTimeMs = Date.now() - startedAt;
 
   if (!res.ok) {
     throw new FetchError(`Site responded with HTTP ${res.status}.`);
@@ -76,6 +108,7 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
 
   const html = await res.text();
   const finalUrl = res.url || url;
+  const origin = new URL(finalUrl).origin;
   const $ = cheerio.load(html);
 
   const getMeta = (selector: string) =>
@@ -108,6 +141,11 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
     "/favicon.ico";
   const favicon = new URL(iconHref, finalUrl).toString();
 
+  const appleTouchIconHref = $('link[rel="apple-touch-icon"]').attr("href");
+  const appleTouchIcon = appleTouchIconHref
+    ? new URL(appleTouchIconHref, finalUrl).toString()
+    : undefined;
+
   const themeColor = getMeta('meta[name="theme-color"]');
   const robots = getMeta('meta[name="robots"]');
   const lang = $("html").attr("lang")?.trim();
@@ -115,6 +153,9 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
   const charset =
     $("meta[charset]").attr("charset") ||
     getMeta('meta[http-equiv="Content-Type"]');
+  const author = getMeta('meta[name="author"]');
+  const keywords = getMeta('meta[name="keywords"]');
+  const generator = getMeta('meta[name="generator"]');
 
   let ogImage: ImageInfo | undefined;
   const ogImageUrl = og["og:image:secure_url"] || og["og:image"];
@@ -134,6 +175,43 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
     };
   }
 
+  const [robotsTxt, sitemap] = await Promise.all([
+    checkRobotsTxt(origin),
+    checkSitemap(origin),
+  ]);
+
+  const securityHeaders = {
+    hsts: res.headers.has("strict-transport-security"),
+    xContentTypeOptions: res.headers.has("x-content-type-options"),
+    xFrameOptions: res.headers.has("x-frame-options"),
+    csp: res.headers.has("content-security-policy"),
+  };
+
+  const rawTags: RawTag[] = [];
+  if (title) rawTags.push({ type: "title", name: "title", value: title });
+  $("meta").each((_, el) => {
+    const name = $(el).attr("name") || $(el).attr("http-equiv");
+    const charsetAttr = $(el).attr("charset");
+    const content = $(el).attr("content");
+    if (charsetAttr) {
+      rawTags.push({ type: "meta", name: "charset", value: charsetAttr });
+      return;
+    }
+    const property = $(el).attr("property");
+    if (name && content) {
+      rawTags.push({ type: "meta", name, value: content });
+    } else if (property && content && !property.startsWith("og:")) {
+      rawTags.push({ type: "meta", name: property, value: content });
+    }
+  });
+  Object.entries(og).forEach(([name, value]) => rawTags.push({ type: "og", name, value }));
+  Object.entries(twitter).forEach(([name, value]) => rawTags.push({ type: "twitter", name, value }));
+  $("link").each((_, el) => {
+    const rel = $(el).attr("rel");
+    const href = $(el).attr("href");
+    if (rel && href) rawTags.push({ type: "link", name: rel, value: href });
+  });
+
   return {
     url,
     finalUrl,
@@ -141,13 +219,26 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
     description,
     canonical,
     favicon,
+    appleTouchIcon,
     themeColor,
     robots,
     lang,
     viewport,
     charset,
+    author,
+    keywords,
+    generator,
     og,
     twitter,
     ogImage,
+    httpStatus: res.status,
+    loadTimeMs,
+    contentType: res.headers.get("content-type") ?? undefined,
+    server: res.headers.get("server") ?? undefined,
+    redirected: res.redirected,
+    securityHeaders,
+    robotsTxt,
+    sitemap,
+    rawTags,
   };
 }

@@ -313,6 +313,46 @@ const CHECKS: CheckDef[] = [
     weight: 2,
     evaluate: (m) => statusFrom(!!m.themeColor, m.themeColor ? "theme-color present (used by Discord embeds)." : "No theme-color set.", m.themeColor),
   },
+  {
+    id: "no-redirect-chain",
+    label: "No redirect chain",
+    category: "technical",
+    weight: 2,
+    evaluate: (m) =>
+      statusFrom(!m.redirected, m.redirected ? "URL redirects before resolving — point tags at the final URL." : "URL resolves directly without redirects."),
+  },
+  {
+    id: "response-time",
+    label: "Fast response time",
+    category: "technical",
+    weight: 2,
+    evaluate: (m) => {
+      if (m.loadTimeMs <= 800) return { status: "pass", message: `Page responds quickly (${m.loadTimeMs}ms).` };
+      if (m.loadTimeMs <= 2000) return { status: "warning", message: `Page took ${m.loadTimeMs}ms to respond.` };
+      return { status: "error", message: `Page took ${m.loadTimeMs}ms to respond — slow crawlers may time out.` };
+    },
+  },
+  {
+    id: "sitemap",
+    label: "sitemap.xml found",
+    category: "technical",
+    weight: 1,
+    evaluate: (m) =>
+      statusFrom(!!m.sitemap.found, m.sitemap.found ? `Sitemap found${m.sitemap.urlCount ? ` (${m.sitemap.urlCount} URLs)` : ""}.` : "No sitemap.xml found at the root."),
+  },
+  {
+    id: "security-headers",
+    label: "Security headers present",
+    category: "technical",
+    weight: 2,
+    evaluate: (m) => {
+      const values = Object.values(m.securityHeaders);
+      const count = values.filter(Boolean).length;
+      if (count === values.length) return { status: "pass", message: "Good security headers (SSL)." };
+      if (count === 0) return { status: "warning", message: "No common security headers detected." };
+      return { status: "warning", message: `${count}/${values.length} common security headers detected.` };
+    },
+  },
 
   // ---- Extras (10 pts) ----
   {
@@ -346,6 +386,20 @@ const CHECKS: CheckDef[] = [
     category: "extras",
     weight: 1,
     evaluate: (m) => statusFrom(!!m.twitter["twitter:creator"], m.twitter["twitter:creator"] ? "twitter:creator present." : "Missing twitter:creator (optional).", m.twitter["twitter:creator"]),
+  },
+  {
+    id: "author-present",
+    label: "Author meta present",
+    category: "extras",
+    weight: 1,
+    evaluate: (m) => statusFrom(!!m.author, m.author ? "Author meta tag found." : "No author meta — useful for content attribution.", m.author),
+  },
+  {
+    id: "content-type-header",
+    label: "Content-Type header set",
+    category: "extras",
+    weight: 1,
+    evaluate: (m) => statusFrom(!!m.contentType, m.contentType ? `Content-Type header: ${m.contentType}.` : "No Content-Type response header detected."),
   },
   {
     id: "duplicate-title-desc",
