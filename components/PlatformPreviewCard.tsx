@@ -53,14 +53,14 @@ export function PlatformPreviewCard({
   return (
     <div className="rounded-xl border border-border bg-surface p-5 flex flex-col">
       <div className="flex items-start justify-between mb-1">
-        <h3 className="font-medium text-white">{PLATFORM_LABEL[platform]}</h3>
+        <h3 className="font-medium text-fg">{PLATFORM_LABEL[platform]}</h3>
         <StatusBadge status={data.status} />
       </div>
       <p className="text-xs text-muted mb-3">Using: {PLATFORM_USES[platform]}</p>
 
       <div className="flex-1">
         {platform === "google" && (
-          <div className="rounded-lg bg-white text-black p-4">
+          <div className="rounded-lg bg-fg text-background p-4">
             <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
               <Globe size={14} />
               <span>
@@ -77,7 +77,7 @@ export function PlatformPreviewCard({
         )}
 
         {platform === "x" && (
-          <div className="rounded-lg overflow-hidden border border-white/10 bg-white text-black">
+          <div className="rounded-lg overflow-hidden border border-white/10 bg-fg text-background">
             {data.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -101,7 +101,7 @@ export function PlatformPreviewCard({
         )}
 
         {(platform === "linkedin" || platform === "facebook") && (
-          <div className="rounded-lg overflow-hidden border border-white/10 bg-white/5">
+          <div className="rounded-lg overflow-hidden border border-white/10 bg-fg/5">
             {data.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -124,7 +124,7 @@ export function PlatformPreviewCard({
         )}
 
         {platform === "discord" && (
-          <div className="rounded-md bg-white/5 border-l-4 border-accent p-3">
+          <div className="rounded-md bg-fg/5 border-l-4 border-accent p-3">
             <div className="text-xs text-muted">{data.domain}</div>
             <div className="text-accent font-medium leading-snug">
               {data.title}
@@ -138,7 +138,7 @@ export function PlatformPreviewCard({
         )}
 
         {platform === "slack" && (
-          <div className="rounded-md bg-white text-black border-l-4 border-blue-500 p-3">
+          <div className="rounded-md bg-fg text-background border-l-4 border-blue-500 p-3">
             <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-0.5">
               <Globe size={12} />
               {data.domain}
@@ -186,7 +186,7 @@ export function PlatformPreviewCard({
         )}
 
         {platform === "imessage" && (
-          <div className="rounded-md bg-white/5 p-3">
+          <div className="rounded-md bg-fg/5 p-3">
             <div className="text-[10px] uppercase text-muted tracking-wide">
               {data.domain}
             </div>

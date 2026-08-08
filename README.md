@@ -1,81 +1,51 @@
 # Metaview
 
-Analyze and preview your website's link previews — Open Graph, Twitter Cards,
-and meta tags — across 9+ platforms: Google, X, LinkedIn, Discord, Slack,
-WhatsApp, Telegram, Facebook, and iMessage.
+Link preview / meta tag analyzer (Open Graph, Twitter Cards, SEO tags).
 
-Built with **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**.
+**Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, cheerio.
+
+## Architecture
+
+- **No backend database.** The one API route (`app/api/analyze/route.ts`) only
+  fetches a URL server-side and parses/scores its meta tags — that hop is
+  required because browsers block cross-origin `fetch` of arbitrary HTML
+  (CORS). It returns the result and stores nothing.
+- **All persistence is client-side**, in `lib/localHistory.ts`, backed by
+  `localStorage`: every analyzed result, your check history, and your theme
+  preference. Every function in that file is a thin wrapper (`saveResult`,
+  `getResult`, `getHistory`, …) so swapping in Supabase later is a matter of
+  replacing the bodies of those functions — the rest of the app doesn't need
+  to change.
+  - Known limitation: results are only visible in the browser that ran the
+    check. A shared `/results/[id]` link won't resolve on another
+    device/browser until you wire up real storage.
 
 ## Features
 
-- Enter any URL and get an instant score (A–F) across 6 categories
-- 35+ individual quality checks (essential tags, Open Graph, Twitter/X,
-  images, technical, extras)
-- Platform-accurate preview cards showing exactly how the link will render
-- Filter previews by Search / Social / Messaging
-- Shareable result URLs (`/results/[id]`)
-- Fully typed, extensible check engine (`lib/analyzer.ts`)
+1. Homepage (`app/page.tsx`) — URL input, examples, feature grid, FAQ
+2. Analyze API (`app/api/analyze/route.ts`) — fetch + parse + score, no persistence
+3. Meta extraction (`lib/extract.ts`) — title, description, canonical, favicon, OG/Twitter tags, OG image HEAD check, blocks localhost/private IPs
+4. Scoring engine (`lib/analyzer.ts`) — 35+ checks across 6 categories, 0–100 score + A–F grade
+5. Results page (`app/results/[id]/page.tsx`) — score ring, category bars, filterable platform preview grid
+6. Platform previews (`components/PlatformPreviewCard.tsx`, `lib/platformPreview.ts`) — 9 platforms
+7. Local history (`lib/localHistory.ts`, `app/history/page.tsx`) — every check saved in localStorage, no account needed
+8. Copy-paste fix snippets (`components/FixSnippets.tsx`, `lib/fixSnippets.ts`) — Next.js, Astro, Hugo, plain HTML
+9. Export (`components/ExportMenu.tsx`, `lib/exportResult.ts`) — JSON, CSV, raw HTML tags, and a PNG score card
+10. Share button — copies the result URL to the clipboard
+11. Re-analyze — re-runs the check against the same URL and swaps in the fresh result
+12. Dark/light theme toggle (`components/ThemeToggle.tsx`) — persisted, no flash on load
 
-## Getting started
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+## Key files
 
-## Project structure
-
-```
-app/
-  page.tsx                 Home page (URL input + marketing sections)
-  results/[id]/page.tsx    Results page (score + platform previews)
-  api/analyze/route.ts     POST { url } -> fetches, extracts, scores
-  api/results/[id]/route.ts GET a stored result (for shareable links)
-components/                UI building blocks
-lib/
-  extract.ts                Fetches a URL and parses its meta tags (cheerio)
-  analyzer.ts                Runs the 35+ weighted checks and computes score
-  platforms.ts                Platform definitions (Google, X, LinkedIn, ...)
-  platformPreview.ts           Resolves per-platform title/description/image
-  store.ts                      In-memory result store (swap for a DB in prod)
-types/index.ts               Shared TypeScript types
-```
-
-## How scoring works
-
-Each check belongs to a category (Essential, Open Graph, Twitter/X, Images,
-Technical, Extras) and carries a weight. A check's `pass` status contributes
-its weight to that category's earned score. The total score is the earned
-points divided by the possible points, mapped to a letter grade:
-
-| Score | Grade |
-| ----- | ----- |
-| 90+   | A     |
-| 75+   | B     |
-| 60+   | C     |
-| 40+   | D     |
-| <40   | F     |
-
-Add or tune checks in `lib/analyzer.ts` — each is a small, isolated function
-that takes the extracted meta and returns a status + message.
-
-## Notes on the in-memory store
-
-`lib/store.ts` keeps analyzed results in memory for the life of the server
-process, which is enough for local development and demos. For production,
-swap it for Redis, Vercel KV, or a database so shareable links survive
-restarts and work across multiple server instances.
-
-## Deploying
-
-Works out of the box on [Vercel](https://vercel.com):
-
-```bash
-npm run build
-```
-
-## License
-
-MIT
+- `types/index.ts` — shared types
+- `lib/analyzer.ts` — scoring checks
+- `lib/platforms.ts` — platform list
+- `lib/localHistory.ts` — client-side persistence layer (swap for Supabase here)
+- `components/PlatformPreviewCard.tsx` — platform preview UI

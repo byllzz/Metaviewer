@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractMeta, FetchError } from "@/lib/extract";
 import { analyze } from "@/lib/analyzer";
-import { generateId, saveResult } from "@/lib/store";
+import { generateId } from "@/lib/id";
 
+// This route only fetches + parses + scores a URL server-side (required to
+// avoid browser CORS restrictions when reading another site's HTML). It does
+// NOT persist anything — the client is responsible for storing the result
+// (see lib/localHistory.ts, which uses localStorage today and can be swapped
+// for Supabase later without changing this route).
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
@@ -22,7 +27,6 @@ export async function POST(req: NextRequest) {
     const meta = await extractMeta(url);
     const id = generateId();
     const result = analyze(meta, id);
-    saveResult(result);
     return NextResponse.json(result, { status: 200 });
   } catch (err) {
     if (err instanceof FetchError) {

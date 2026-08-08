@@ -9,14 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#0a0a0a",
-        surface: "#141414",
-        border: "#262626",
+        background: "rgb(var(--color-background) / <alpha-value>)",
+        surface: "rgb(var(--color-surface) / <alpha-value>)",
+        border: "rgb(var(--color-border) / <alpha-value>)",
         accent: {
-          DEFAULT: "#f0b27a",
-          light: "#f5cba7",
+          DEFAULT: "rgb(var(--color-accent) / <alpha-value>)",
+          light: "rgb(var(--color-accent-light) / <alpha-value>)",
         },
-        muted: "#9a9a9a",
+        muted: "rgb(var(--color-muted) / <alpha-value>)",
+        fg: "rgb(var(--color-fg) / <alpha-value>)",
       },
       fontFamily: {
         serif: ["Georgia", "Cambria", "'Times New Roman'", "Times", "serif"],

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { saveResult } from "@/lib/localHistory";
 
 const EXAMPLES = ["stripe.com", "vercel.com", "linear.app"];
 
@@ -29,7 +30,7 @@ export function AnalyzeForm() {
         setLoading(false);
         return;
       }
-      sessionStorage.setItem(`metaview:${data.id}`, JSON.stringify(data));
+      saveResult(data);
       router.push(`/results/${data.id}`);
     } catch {
       setError("Network error. Please try again.");
@@ -50,7 +51,7 @@ export function AnalyzeForm() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Enter any URL to analyze…"
-          className="flex-1 h-12 rounded-lg bg-white/5 border border-border px-4 text-sm placeholder:text-muted focus:outline-none focus:border-accent/60 transition-colors"
+          className="flex-1 h-12 rounded-lg bg-fg/5 border border-border px-4 text-sm placeholder:text-muted focus:outline-none focus:border-accent/60 transition-colors"
         />
         <button
           type="submit"

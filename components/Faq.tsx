@@ -49,7 +49,7 @@ export function Faq() {
             onClick={() => setOpen(open === i ? null : i)}
             className="w-full flex items-center justify-between py-4 text-left"
           >
-            <span className="font-medium text-white">{item.q}</span>
+            <span className="font-medium text-fg">{item.q}</span>
             <ChevronDown
               size={18}
               className={`text-muted transition-transform ${

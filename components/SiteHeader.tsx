@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Github, Moon } from "lucide-react";
+import { Github, History } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteHeader() {
   return (
@@ -11,20 +12,22 @@ export function SiteHeader() {
         <span className="font-serif text-xl tracking-wide">Metaview</span>
       </Link>
       <div className="flex items-center gap-2">
-        <button
-          aria-label="Toggle theme"
-          className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-white transition-colors"
+        <Link
+          href="/history"
+          className="h-9 flex items-center gap-2 px-3 rounded-md border border-border text-sm text-muted hover:text-fg transition-colors"
         >
-          <Moon size={16} />
-        </button>
+          <History size={15} />
+          <span className="hidden sm:inline">History</span>
+        </Link>
+        <ThemeToggle />
         <a
           href="https://github.com"
           target="_blank"
           rel="noreferrer"
-          className="h-9 flex items-center gap-2 px-3 rounded-md border border-border text-sm text-white hover:bg-white/5 transition-colors"
+          className="h-9 flex items-center gap-2 px-3 rounded-md border border-border text-sm text-fg hover:bg-fg/5 transition-colors"
         >
           <Github size={16} />
-          GitHub
+          <span className="hidden sm:inline">GitHub</span>
         </a>
       </div>
     </header>

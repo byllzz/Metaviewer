@@ -129,7 +129,7 @@ export default function HomePage() {
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
-              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-white"
+              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg"
             >
               <Github size={16} />
             </a>
@@ -137,7 +137,7 @@ export default function HomePage() {
               href="https://twitter.com"
               target="_blank"
               rel="noreferrer"
-              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-white"
+              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg"
             >
               <Twitter size={16} />
             </a>
