@@ -2,6 +2,9 @@
   <a href="https://metaviewer.vercel.app/">
     <img src="./public/preview.png" alt="Metaviewer Preview">
   </a>
+   <a href="https://metaviewer.vercel.app/">
+    <img src="./public/resultPagePreview.png" alt="Metaviewer Preview">
+  </a>
 </p>
 
 <!-- Light theme (will show when GitHub is in Light mode) -->
@@ -208,4 +211,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-© 2026 Metaviewer. Licensed under the MIT License.
+
+## Author
+
+<img src="https://github.com/byllzz.png" width="80" height="80" alt="Dev Prasad Sethi" />
+
+### Dev Prasad Sethi
+
+[![Twitter](https://img.shields.io/badge/@bilalmlkdev-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://x.com/bilalmlkdev)
+[![GitHub](https://img.shields.io/badge/byllzz-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/byllzz)
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=flat-square&logo=vercel&logoColor=white)](https://bilalmlkdev.vercel.app)
+
+**Metaview** | See what matters in your website, with clear, actionable insights.
+
+© 2026 Metaview. All rights reserved.
+
