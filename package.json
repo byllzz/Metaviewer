@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Metaviewer – analyze and preview your website's link previews (Open Graph, Twitter Cards, and more) across 9+ platforms.",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

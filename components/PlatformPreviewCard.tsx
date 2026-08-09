@@ -51,14 +51,14 @@ export function PlatformPreviewCard({
   const data = resolvePreview(platform, meta);
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 flex flex-col">
+    <div className="mb-5 break-inside-avoid w-full rounded-xl border border-border bg-surface p-5 flex flex-col">
       <div className="flex items-start justify-between mb-1">
         <h3 className="font-medium text-fg">{PLATFORM_LABEL[platform]}</h3>
         <StatusBadge status={data.status} />
       </div>
       <p className="text-xs text-muted mb-3">Using: {PLATFORM_USES[platform]}</p>
 
-      <div className="flex-1">
+      <div>
         {platform === "google" && (
           <div className="rounded-lg bg-fg text-background p-4">
             <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">

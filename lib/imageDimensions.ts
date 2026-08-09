@@ -36,7 +36,7 @@ export function probeImageDimensions(buf: Buffer): ProbedImage | null {
         offset++;
         continue;
       }
-      const marker = buf[offset + 1];
+      const marker = buf[offset + 1] ?? 0;
       const isSOF =
         marker >= 0xc0 &&
         marker <= 0xcf &&
@@ -69,8 +69,8 @@ export function probeImageDimensions(buf: Buffer): ProbedImage | null {
       return { width, height, format: "webp" };
     }
     if (chunk === "VP8X") {
-      const width = (buf[24] | (buf[25] << 8) | (buf[26] << 16)) + 1;
-      const height = (buf[27] | (buf[28] << 8) | (buf[29] << 16)) + 1;
+      const width = ((buf[24] ?? 0) | ((buf[25] ?? 0) << 8) | ((buf[26] ?? 0) << 16)) + 1;
+      const height = ((buf[27] ?? 0) | ((buf[28] ?? 0) << 8) | ((buf[29] ?? 0) << 16)) + 1;
       return { width, height, format: "webp" };
     }
   }
@@ -82,8 +82,8 @@ export function probeImageDimensions(buf: Buffer): ProbedImage | null {
 
   // ICO: use the first embedded image's directory entry (offsets 6/7, 0 means 256).
   if (buf[0] === 0 && buf[1] === 0 && buf[2] === 1 && buf[3] === 0) {
-    const w = buf[6] === 0 ? 256 : buf[6];
-    const h = buf[7] === 0 ? 256 : buf[7];
+    const w = (buf[6] ?? 0) === 0 ? 256 : (buf[6] ?? 0);
+    const h = (buf[7] ?? 0) === 0 ? 256 : (buf[7] ?? 0);
     return { width: w, height: h, format: "ico" };
   }
 
@@ -92,8 +92,8 @@ export function probeImageDimensions(buf: Buffer): ProbedImage | null {
 
 function trySmall(buf: Buffer): ProbedImage | null {
   if (buf.length >= 4 && buf[0] === 0 && buf[1] === 0 && buf[2] === 1 && buf[3] === 0 && buf.length >= 8) {
-    const w = buf[6] === 0 ? 256 : buf[6];
-    const h = buf[7] === 0 ? 256 : buf[7];
+    const w = (buf[6] ?? 0) === 0 ? 256 : (buf[6] ?? 0);
+    const h = (buf[7] ?? 0) === 0 ? 256 : (buf[7] ?? 0);
     return { width: w, height: h, format: "ico" };
   }
   return null;

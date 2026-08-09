@@ -40,15 +40,23 @@ export function RecentAnalysis() {
               <p className="text-xs text-muted">Your latest checks</p>
             </div>
           </div>
-          <button
-            onClick={() => {
-              clearHistory();
-              setEntries([]);
-            }}
-            className="text-sm text-muted hover:text-fg transition-colors"
-          >
-            Clear All
-          </button>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/history"
+              className="text-sm text-accent hover:underline"
+            >
+              View all
+            </Link>
+            <button
+              onClick={() => {
+                clearHistory();
+                setEntries([]);
+              }}
+              className="text-sm text-muted hover:text-fg transition-colors"
+            >
+              Clear All
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -36,9 +36,9 @@ export function PreviewsTab({ result }: { result: AnalysisResult }) {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-5">
         {platforms.map((p, i) => (
-          <div key={p.id} className="rise-in" style={{ animationDelay: `${i * 40}ms` }}>
+          <div key={p.id} className="break-inside-avoid rise-in" style={{ animationDelay: `${i * 40}ms` }}>
             <PlatformPreviewCard platform={p.id} meta={result.meta} />
           </div>
         ))}

@@ -3,39 +3,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { saveResult } from "@/lib/localHistory";
 
 const EXAMPLES = ["stripe.com", "vercel.com", "linear.app"];
 
 export function AnalyzeForm() {
   const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [navigating, setNavigating] = useState(false);
   const router = useRouter();
 
-  async function submit(value: string) {
+  function submit(value: string) {
     const target = value.trim();
-    if (!target) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: target }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Something went wrong.");
-        setLoading(false);
-        return;
-      }
-      saveResult(data);
-      router.push(`/results/${data.id}`);
-    } catch {
-      setError("Network error. Please try again.");
-      setLoading(false);
-    }
+    if (!target || navigating) return;
+    setNavigating(true);
+    router.push(`/analyzing?url=${encodeURIComponent(target)}`);
   }
 
   return (
@@ -55,10 +35,10 @@ export function AnalyzeForm() {
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={navigating}
           className="h-12 shrink-0 px-5 rounded-lg bg-accent text-black font-medium text-sm flex items-center gap-2 hover:bg-accent-light transition-colors disabled:opacity-60"
         >
-          {loading ? (
+          {navigating ? (
             <Loader2 size={16} className="animate-spin" />
           ) : (
             <>
@@ -68,8 +48,6 @@ export function AnalyzeForm() {
         </button>
       </form>
 
-      {error && <p className="text-sm text-red-400 mt-3">{error}</p>}
-
       <div className="flex items-center gap-2 text-sm text-muted mt-4">
         <span>Try:</span>
         {EXAMPLES.map((ex) => (
@@ -78,6 +56,7 @@ export function AnalyzeForm() {
             onClick={() => submit(ex)}
             className="text-accent hover:underline"
             type="button"
+            disabled={navigating}
           >
             {ex}
           </button>
