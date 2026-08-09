@@ -2,14 +2,14 @@
 
 import type { AnalysisResult } from "@/types";
 
-// All persistence for Metaview lives in the browser (localStorage) for now.
+// All persistence for Metaviewer lives in the browser (localStorage) for now.
 // There is no backend database — every function here is a thin wrapper
 // around localStorage so it's a single, obvious place to swap in Supabase
 // later (same function signatures, swap the body for `supabase.from(...)`).
 
-const RESULT_PREFIX = "metaview:result:";
-const HISTORY_KEY = "metaview:history";
-const THEME_KEY = "metaview:theme";
+const RESULT_PREFIX = "metaviewer:result:";
+const HISTORY_KEY = "metaviewer:history";
+const THEME_KEY = "metaviewer:theme";
 const MAX_HISTORY = 50;
 
 export interface HistoryEntry {
@@ -19,6 +19,9 @@ export interface HistoryEntry {
   score: number;
   grade: string;
   fetchedAt: string;
+  passCount: number;
+  warningCount: number;
+  errorCount: number;
 }
 
 function isBrowser() {
@@ -57,6 +60,9 @@ function addToHistory(result: AnalysisResult): void {
     score: result.totalScore,
     grade: result.grade,
     fetchedAt: result.fetchedAt,
+    passCount: result.checks.filter((c) => c.status === "pass").length,
+    warningCount: result.checks.filter((c) => c.status === "warning").length,
+    errorCount: result.checks.filter((c) => c.status === "error").length,
   });
   try {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, MAX_HISTORY)));

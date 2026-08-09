@@ -1,24 +1,17 @@
 import Link from "next/link";
-import { Github, History } from "lucide-react";
+import { Github } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteHeader() {
   return (
-    <header className="flex items-center justify-between px-8 py-5 border-b border-border/60">
+    <header className="flex items-center justify-between px-6 sm:px-8 py-4 border-b border-border/60">
       <Link href="/" className="flex items-center gap-2">
         <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-accent/20 text-accent">
           ◆
         </span>
-        <span className="font-serif text-xl tracking-wide">Metaview</span>
+        <span className="font-serif text-xl tracking-wide">Metaviewer</span>
       </Link>
       <div className="flex items-center gap-2">
-        <Link
-          href="/history"
-          className="h-9 flex items-center gap-2 px-3 rounded-md border border-border text-sm text-muted hover:text-fg transition-colors"
-        >
-          <History size={15} />
-          <span className="hidden sm:inline">History</span>
-        </Link>
         <ThemeToggle />
         <a
           href="https://github.com"

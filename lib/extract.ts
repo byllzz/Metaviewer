@@ -10,7 +10,7 @@ import type {
 import { probeImageDimensions } from "@/lib/imageDimensions";
 
 const USER_AGENT =
-  "Mozilla/5.0 (compatible; MetaviewBot/1.0; +https://metaview.app/bot)";
+  "Mozilla/5.0 (compatible; MetaviewerBot/1.0; +https://metaviewer.app/bot)";
 
 // Enough header bytes to reach the SOF marker in the vast majority of real-world
 // JPEGs (which usually front-load EXIF/ICC before the frame header) without

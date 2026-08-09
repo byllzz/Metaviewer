@@ -10,6 +10,7 @@ import {
   ExternalLink,
   Loader2,
   Check,
+  History,
 } from "lucide-react";
 import type { AnalysisResult } from "@/types";
 import { ScoreRing } from "@/components/ScoreRing";
@@ -137,6 +138,13 @@ export default function ResultsPage() {
             {copied ? "Copied" : "Share"}
           </button>
           <ExportMenu result={result} captureRef={scoreCardRef} />
+          <button
+            onClick={() => router.push("/history")}
+            className="hidden sm:flex items-center gap-1.5 h-9 px-3 rounded-md border border-border text-sm text-muted hover:text-fg transition-colors"
+          >
+            <History size={14} />
+            History
+          </button>
           <ThemeToggle />
           <button
             onClick={() => router.push("/")}

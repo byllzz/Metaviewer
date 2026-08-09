@@ -10,10 +10,15 @@ import {
   History,
   Github,
   Twitter,
+  Link2,
+  ScanSearch,
+  ListChecks,
 } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { AnalyzeForm } from "@/components/AnalyzeForm";
+import { RecentAnalysis } from "@/components/RecentAnalysis";
 import { Faq } from "@/components/Faq";
+import { PLATFORMS } from "@/lib/platforms";
 
 const FEATURES = [
   {
@@ -33,8 +38,8 @@ const FEATURES = [
   },
   {
     icon: ImageIcon,
-    title: "Image Analysis",
-    body: "Analyze OG image dimensions, file size, load time, aspect ratio, and see how it fits each platform.",
+    title: "Real Image Analysis",
+    body: "Decoded image dimensions, file size, aspect ratio, and how it fits each platform — not just declared meta tags.",
   },
   {
     icon: FileJson,
@@ -63,12 +68,30 @@ const FEATURES = [
   },
 ];
 
+const STEPS = [
+  {
+    icon: Link2,
+    title: "Paste a URL",
+    body: "Drop in any public link — your homepage, a blog post, a product page.",
+  },
+  {
+    icon: ScanSearch,
+    title: "We analyze it",
+    body: "Metaviewer fetches the page and runs 35+ checks across meta tags, images, and technical setup.",
+  },
+  {
+    icon: ListChecks,
+    title: "Get a scored report",
+    body: "See your grade, exactly what's missing, and copy-paste fixes for every platform preview.",
+  },
+];
+
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
 
-      <section className="flex flex-col items-center text-center px-6 pt-20 pb-24">
+      <section className="flex flex-col items-center text-center px-6 pt-16 pb-14">
         <span className="text-xs px-3 py-1 rounded-full border border-border text-muted mb-6">
           Free &amp; Open Source
         </span>
@@ -79,14 +102,36 @@ export default function HomePage() {
           </span>
         </h1>
 
-        <div className="mt-10 w-full flex justify-center">
+        <div id="analyze" className="mt-9 w-full flex justify-center scroll-mt-24">
           <AnalyzeForm />
         </div>
       </section>
 
-      <section className="px-6 pb-16 bg-grid">
-        <p className="max-w-2xl mx-auto text-center text-muted mb-12">
-          Metaview goes beyond basic meta tag checking. Get detailed
+      <RecentAnalysis />
+
+      <section className="px-6 py-14 border-t border-border/60">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {STEPS.map((step, i) => (
+            <div key={step.title} className="relative text-center sm:text-left">
+              <div className="flex items-center gap-3 sm:flex-col sm:items-start justify-center sm:justify-start">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-accent sm:mb-4">
+                  <step.icon size={18} />
+                </span>
+                <span className="text-xs text-muted font-mono sm:hidden">0{i + 1}</span>
+              </div>
+              <h3 className="font-medium mt-3 sm:mt-0">
+                <span className="hidden sm:inline text-muted font-mono text-xs mr-2">0{i + 1}</span>
+                {step.title}
+              </h3>
+              <p className="text-sm text-muted leading-relaxed mt-1.5">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-6 py-14 bg-grid border-t border-border/60">
+        <p className="max-w-2xl mx-auto text-center text-muted mb-10">
+          Metaviewer goes beyond basic meta tag checking. Get detailed
           analysis, actionable fixes, and beautiful previews.
         </p>
 
@@ -101,9 +146,42 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="px-6 py-14 border-t border-border/60">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-muted mb-8">Checked against every major platform</h2>
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {PLATFORMS.map((p) => (
+              <span
+                key={p.id}
+                className="px-3.5 py-2 rounded-lg border border-border bg-surface text-sm text-muted"
+              >
+                {p.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-16 border-t border-border/60">
+        <div className="max-w-2xl mx-auto text-center rounded-2xl border border-border bg-surface px-8 py-12">
+          <h2 className="font-serif text-2xl sm:text-3xl mb-3">
+            Ready to see your link previews?
+          </h2>
+          <p className="text-muted mb-8">
+            Free, no account required. Results in seconds.
+          </p>
+          <a
+            href="#analyze"
+            className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-accent text-black font-medium text-sm hover:bg-accent-light transition-colors"
+          >
+            Analyze a URL
+          </a>
+        </div>
+      </section>
+
       <section className="px-6 pb-24">
         <h2 className="text-center text-muted mb-8">
-          Everything you need to know about Metaview.
+          Everything you need to know about Metaviewer.
         </h2>
         <div className="max-w-2xl mx-auto">
           <Faq />
@@ -117,7 +195,7 @@ export default function HomePage() {
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-accent/20 text-accent text-sm">
                 ◆
               </span>
-              <span className="font-serif text-lg">Metaview</span>
+              <span className="font-serif text-lg">Metaviewer</span>
             </div>
             <p className="text-sm text-muted max-w-xs">
               See what matters in your website, with clear, actionable
@@ -129,7 +207,7 @@ export default function HomePage() {
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
-              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg"
+              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg transition-colors"
             >
               <Github size={16} />
             </a>
@@ -137,14 +215,14 @@ export default function HomePage() {
               href="https://twitter.com"
               target="_blank"
               rel="noreferrer"
-              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg"
+              className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg transition-colors"
             >
               <Twitter size={16} />
             </a>
           </div>
         </div>
         <p className="text-xs text-muted mt-10">
-          © {new Date().getFullYear()} Metaview. All rights reserved.
+          © {new Date().getFullYear()} Metaviewer. All rights reserved.
         </p>
       </footer>
     </div>

@@ -1,8 +1,8 @@
 {
-  "name": "metaview",
+  "name": "metaviewer",
   "version": "1.0.0",
   "private": true,
-  "description": "Metaview – analyze and preview your website's link previews (Open Graph, Twitter Cards, and more) across 9+ platforms.",
+  "description": "Metaviewer – analyze and preview your website's link previews (Open Graph, Twitter Cards, and more) across 9+ platforms.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

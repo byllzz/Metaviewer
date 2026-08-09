@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Metaview – Your link previews are broken. Find out why.",
+  title: "Metaviewer – Your link previews are broken. Find out why.",
   description:
     "Analyze your website's Open Graph tags, Twitter Cards, and meta tags. See exactly how your links preview on Google, X, LinkedIn, Discord, Slack, WhatsApp, Telegram, Facebook, and iMessage.",
 };
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const themeInitScript = `
 (function () {
   try {
-    var stored = localStorage.getItem("metaview:theme");
+    var stored = localStorage.getItem("metaviewer:theme");
     var theme = stored === "light" || stored === "dark"
       ? stored
       : (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");

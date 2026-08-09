@@ -67,7 +67,7 @@ function CategorySection({
     <div className="rounded-xl border border-border bg-surface overflow-hidden rise-in">
       <button onClick={() => setOpen((v) => !v)} className="w-full flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
-          <span className="text-accent">{CATEGORY_ICONS[checks[0]?.category] ?? "◆"}</span>
+          <span className="text-accent">{CATEGORY_ICONS[checks[0]?.category ?? "essential"]}</span>
           <div className="text-left">
             <h3 className="font-medium">{label}</h3>
             <p className="text-xs text-muted">{points} checks</p>

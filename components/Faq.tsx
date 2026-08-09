@@ -5,8 +5,8 @@ import { ChevronDown } from "lucide-react";
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: "Is Metaview really free?",
-    a: "Yes. Metaview is free and open source. Run it yourself or use the hosted version with no account required.",
+    q: "Is Metaviewer really free?",
+    a: "Yes. Metaviewer is free and open source. Run it yourself or use the hosted version with no account required.",
   },
   {
     q: "Do you store or track my URLs?",
@@ -18,7 +18,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Why can't I check localhost URLs?",
-    a: "Metaview needs to reach your site the same way an external crawler would, so local or private-network URLs can't be analyzed. Deploy a preview or use a tunnel like ngrok first.",
+    a: "Metaviewer needs to reach your site the same way an external crawler would, so local or private-network URLs can't be analyzed. Deploy a preview or use a tunnel like ngrok first.",
   },
   {
     q: "What's a good score?",
@@ -26,7 +26,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How is the score calculated?",
-    a: "Metaview runs 35+ checks across six categories — essential tags, Open Graph, Twitter/X, images, technical setup, and extras — each weighted by how much it affects preview quality.",
+    a: "Metaviewer runs 35+ checks across six categories — essential tags, Open Graph, Twitter/X, images, technical setup, and extras — each weighted by how much it affects preview quality.",
   },
   {
     q: "Can I use this in my CI/CD pipeline?",
@@ -34,7 +34,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How do I contribute?",
-    a: "Metaview is open source — check the GitHub repository for contribution guidelines, open issues, and the roadmap.",
+    a: "Metaviewer is open source — check the GitHub repository for contribution guidelines, open issues, and the roadmap.",
   },
 ];
 
