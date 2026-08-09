@@ -2,13 +2,10 @@
   <a href="https://metaviewer.vercel.app/">
     <img src="./public/preview.png" alt="Metaviewer Preview">
   </a>
-   <a href="https://metaviewer.vercel.app/">
+   <!-- <a href="https://metaviewer.vercel.app/">
     <img src="./public/resultPagePreview.png" alt="Metaviewer Preview">
-  </a>
+  </a> -->
 </p>
-
-<!-- Light theme (will show when GitHub is in Light mode) -->
-[![Live Demo](https://img.shields.io/badge/Live_Demo-▶-6366f1?style=flat&labelColor=555#gh-light-mode-only)](https://metaviewer.vercel.app)
 
 <!-- Dark theme (will show when GitHub is in Dark mode) -->
 [![Live Demo](https://img.shields.io/badge/Live_Demo-▶-818cf8?style=flat&labelColor=4b5563#gh-dark-mode-only)](https://metaviewer.vercel.app)
