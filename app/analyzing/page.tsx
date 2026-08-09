@@ -87,7 +87,7 @@ function AnalyzingScreen() {
           Analyzing <span className="text-accent">{url.replace(/^https?:\/\//, "")}</span>
         </p>
         <p className="text-sm text-muted mt-1">
-          Metaviewer servers are fetching and scoring this page — just a moment.
+          Metaviewer servers are fetching and scoring this page - just a moment.
         </p>
       </div>
 

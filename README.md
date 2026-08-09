@@ -1,3 +1,15 @@
+<p align="center">
+  <a href="https://metaviewer.vercel.app/">
+    <img src="./public/preview.png" alt="Metaviewer Preview">
+  </a>
+</p>
+
+<!-- Light theme (will show when GitHub is in Light mode) -->
+[![Live Demo](https://img.shields.io/badge/Live_Demo-▶-6366f1?style=flat&labelColor=555#gh-light-mode-only)](https://metaviewer.vercel.app)
+
+<!-- Dark theme (will show when GitHub is in Dark mode) -->
+[![Live Demo](https://img.shields.io/badge/Live_Demo-▶-818cf8?style=flat&labelColor=4b5563#gh-dark-mode-only)](https://metaviewer.vercel.app)
+
 # Metaviewer
 
 Metaviewer is a link-preview and meta-tag analyzer, in the spirit of
@@ -5,10 +17,10 @@ opengraph.xyz. Paste in any URL and get:
 
 - A **0–100 score** (with an A–F grade) across 6 categories and 40+
   individual checks
-- A live preview of how the link actually renders on **9 platforms** —
+- A live preview of how the link actually renders on **9 platforms** -
   Google, X, LinkedIn, Discord, Slack, WhatsApp, Telegram, Facebook, iMessage
 - Real, **decoded image dimensions** for your OG image, favicon, and
-  apple-touch-icon — not just whatever the page's meta tags claim
+  apple-touch-icon - not just whatever the page's meta tags claim
 - A **copy-paste fix** for every failing or missing check
 - JSON / CSV / raw-HTML / PNG **export**, and a shareable result URL
 - **Local history** of every check, no account required
@@ -20,8 +32,8 @@ No sign-up, no database, no tracking.
 - **Next.js 14** (App Router) + **TypeScript**
 - **Tailwind CSS**, CSS-variable based theming (dark/light, no flash on load)
 - **cheerio** for server-side HTML parsing
-- No animation/UI component libraries — everything is hand-built
-- No image-decoding library — `lib/imageDimensions.ts` is a small,
+- No animation/UI component libraries - everything is hand-built
+- No image-decoding library - `lib/imageDimensions.ts` is a small,
   dependency-free binary parser for PNG/JPEG/GIF/WebP/BMP/ICO headers
 
 ## How it works
@@ -33,13 +45,13 @@ No sign-up, no database, no tracking.
 2. The one server route, `app/api/analyze/route.ts`, fetches that page,
    parses it with cheerio, probes its images for real pixel dimensions, and
    scores it. This is the only server-side hop, and it exists only because
-   browsers block cross-origin `fetch()` of arbitrary HTML — nothing is
+   browsers block cross-origin `fetch()` of arbitrary HTML - nothing is
    persisted on the server.
 3. The result is saved to **your browser's `localStorage`**
    (`lib/localHistory.ts`) and rendered on `/results/[id]`.
 
 Because persistence is entirely client-side, a `/results/[id]` link only
-resolves in the browser that ran the check — sharing across devices would
+resolves in the browser that ran the check - sharing across devices would
 require wiring up a real backend. `lib/localHistory.ts` is written as a set
 of thin wrapper functions specifically so that swap (e.g. to Supabase) can
 happen later without touching call sites.
@@ -54,7 +66,7 @@ app/
   analyzing/page.tsx               Full-page loading state while a check runs
   history/page.tsx                  Local check history (from localStorage)
   api/analyze/route.ts               Server fetch + parse + score, no persistence
-  results/[id]/page.tsx                Results page — tabs, score card, actions
+  results/[id]/page.tsx                Results page - tabs, score card, actions
 
 components/
   AnalyzeForm.tsx, SiteHeader.tsx, ThemeToggle.tsx, ExportMenu.tsx
@@ -76,8 +88,8 @@ lib/
                         detection, real image dimension probing (ranged GET +
                         lib/imageDimensions.ts), builds rawTags[].
   imageDimensions.ts    Dependency-free PNG/JPEG/GIF/WebP/BMP/ICO header
-                          parser — reads a partial byte range, no full decode.
-  analyzer.ts             CHECKS[] — single source of truth for scoring.
+                          parser - reads a partial byte range, no full decode.
+  analyzer.ts             CHECKS[] - single source of truth for scoring.
                             Attaches a fix string (lib/checkFixes.ts) to every
                             non-passing check.
   checkFixes.ts              One actionable fix string per check id.
@@ -124,23 +136,23 @@ npm run build
 npm run start
 ```
 
-Deploys cleanly to Vercel with zero configuration — it's a standard Next.js
+Deploys cleanly to Vercel with zero configuration - it's a standard Next.js
 14 App Router project with a single serverless API route and no environment
 variables required. Verified locally with a clean `npm install && npm run
-build` (Next.js 14.2.35, strict TypeScript, `noUncheckedIndexedAccess` on).
+build` (Next.js 14.2.35, strict TypeScript, `noUncheckedIndexedAccess` on.
 
 ## Known gaps / good next tasks
 
-- **No Accessibility or Performance scoring categories** yet — would need
+- **No Accessibility or Performance scoring categories** yet - would need
   real checks (page-wide image alt-text audit, heading hierarchy, form
   labels, render-blocking resource detection).
 - **Image dimension probing has limits.** JPEG SOF markers are found within
-  the first 256KB fetched — true for the overwhelming majority of real
+  the first 256KB fetched - true for the overwhelming majority of real
   photos/screenshots, but a JPEG with a huge embedded thumbnail/ICC profile
   ahead of the frame header could still come back "Unknown". Progressive
   JPEGs and animated WebP/GIF are read for their first frame's dimensions
   only (correct for previews either way).
-- **Sharing across devices doesn't work** by design — see "How it works"
+- **Sharing across devices doesn't work** by design - see "How it works"
   above. This is the natural spot a real backend (Supabase or otherwise)
   would plug in: replace `lib/localHistory.ts` internals, keep the function
   signatures.
@@ -155,14 +167,45 @@ build` (Next.js 14.2.35, strict TypeScript, `noUncheckedIndexedAccess` on).
 2. New meta/technical fields flow in this order: `types/index.ts` →
    `lib/extract.ts` → `lib/analyzer.ts` (+ `lib/checkFixes.ts` if it's a
    scored check) → the relevant results tab component.
-3. Never hardcode colors — use the theme tokens (`text-fg`, `bg-background`,
+3. Never hardcode colors - use the theme tokens (`text-fg`, `bg-background`,
    `bg-surface`, `border-border`, `text-muted`, `text-accent`).
-4. No new npm dependencies without a good reason — image dimension probing
+4. No new npm dependencies without a good reason - image dimension probing
    was deliberately hand-rolled instead of pulling in a library; keep that
    pattern unless something genuinely justifies a dependency.
-5. Keep `lib/analyzer.ts` as the single scoring source of truth — tabs read
+5. Keep `lib/analyzer.ts` as the single scoring source of truth - tabs read
    `result.checks` / `result.categoryScores`, they never recompute pass/fail.
 
-## License
+## Deploy
 
-MIT
+Deployed on Vercel. Push to your repo and import it in the Vercel dashboard - no config needed, it's a standard Vite app.
+
+If you enjoyed this project, consider giving it a ⭐ on GitHub. It helps others discover the project and motivates future improvements.
+
+# License (MIT)
+
+This project is licensed under the MIT License.
+
+```text
+MIT License
+
+Copyright (c) 2026 Bilal Malik
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+© 2026 Metaviewer. Licensed under the MIT License.

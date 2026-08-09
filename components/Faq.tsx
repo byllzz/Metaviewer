@@ -26,7 +26,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How is the score calculated?",
-    a: "Metaviewer runs 35+ checks across six categories — essential tags, Open Graph, Twitter/X, images, technical setup, and extras — each weighted by how much it affects preview quality.",
+    a: "Metaviewer runs 35+ checks across six categories - essential tags, Open Graph, Twitter/X, images, technical setup, and extras - each weighted by how much it affects preview quality.",
   },
   {
     q: "Can I use this in my CI/CD pipeline?",
@@ -34,7 +34,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How do I contribute?",
-    a: "Metaviewer is open source — check the GitHub repository for contribution guidelines, open issues, and the roadmap.",
+    a: "Metaviewer is open source - check the GitHub repository for contribution guidelines, open issues, and the roadmap.",
   },
 ];
 

@@ -77,7 +77,7 @@ export default function ResultsPage() {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // clipboard unavailable — ignore
+      // clipboard unavailable - ignore
     }
   }
 
@@ -106,9 +106,13 @@ export default function ResultsPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="flex items-center justify-between px-6 py-4 border-b border-border/60 sticky top-0 z-30 bg-background/80 backdrop-blur">
-        <div className="flex items-center gap-3 min-w-0">
-          <button onClick={() => router.push("/")} className="text-muted hover:text-fg transition-colors">
+      <header className="flex items-center justify-between px-6 py-3 border-b border-border/60 sticky top-0 z-30 bg-background/80 backdrop-blur">
+        <div className="w-full max-w-[1100px] mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-3 min-w-0  ">
+          <button
+            onClick={() => router.push("/")}
+            className="text-muted hover:text-fg transition-colors"
+          >
             <ArrowLeft size={18} />
           </button>
           <a
@@ -127,14 +131,22 @@ export default function ResultsPage() {
             disabled={reanalyzing}
             className="hidden sm:flex items-center gap-1.5 h-9 px-3 rounded-md border border-border text-sm text-muted hover:text-fg transition-colors disabled:opacity-60"
           >
-            {reanalyzing ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+            {reanalyzing ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <RefreshCw size={14} />
+            )}
             Re-analyze
           </button>
           <button
             onClick={share}
             className="hidden sm:flex items-center gap-1.5 h-9 px-3 rounded-md border border-border text-sm text-muted hover:text-fg transition-colors"
           >
-            {copied ? <Check size={14} className="text-emerald-400" /> : <Share2 size={14} />}
+            {copied ? (
+              <Check size={14} className="text-emerald-400" />
+            ) : (
+              <Share2 size={14} />
+            )}
             {copied ? "Copied" : "Share"}
           </button>
           <ExportMenu result={result} captureRef={scoreCardRef} />
@@ -153,6 +165,7 @@ export default function ResultsPage() {
             <Plus size={14} /> New Analysis
           </button>
         </div>
+        </div>
       </header>
 
       {error && (
@@ -161,22 +174,32 @@ export default function ResultsPage() {
         </div>
       )}
 
-      <main className="px-6 py-8 max-w-6xl mx-auto">
-        <div ref={scoreCardRef} className="rounded-xl border border-border bg-surface p-6 mb-8 rise-in">
+      <main className="px-6 py-6 max-w-6xl mx-auto">
+        <div
+          ref={scoreCardRef}
+          className="rounded-xl border border-border bg-surface p-6 mb-5 rise-in"
+        >
           <div className="flex flex-wrap items-center gap-6 justify-between">
             <div className="flex items-center gap-5">
               <ScoreRing score={result.totalScore} grade={result.grade} />
               <div>
                 <p className="text-lg">{result.summary}</p>
                 <p className="text-xs text-muted mt-1">
-                  {result.finalUrl.replace(/^https?:\/\//, "")} · checked {new Date(result.fetchedAt).toLocaleDateString()}
+                  {result.finalUrl.replace(/^https?:\/\//, "")} · checked{" "}
+                  {new Date(result.fetchedAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-6 text-sm">
-              <span className="flex items-center gap-1.5 text-emerald-400">✓ {passCount}</span>
-              <span className="flex items-center gap-1.5 text-amber-400">⚠ {warningCount}</span>
-              <span className="flex items-center gap-1.5 text-red-400">✕ {errorCount}</span>
+              <span className="flex items-center gap-1.5 text-emerald-400">
+                ✓ {passCount}
+              </span>
+              <span className="flex items-center gap-1.5 text-amber-400">
+                ⚠ {warningCount}
+              </span>
+              <span className="flex items-center gap-1.5 text-red-400">
+                ✕ {errorCount}
+              </span>
             </div>
           </div>
           <CategoryBars categories={result.categoryScores} />

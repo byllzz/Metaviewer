@@ -23,7 +23,7 @@ export function RecentAnalysis() {
     setLoaded(true);
   }, []);
 
-  // Nothing saved yet in this browser — don't show an empty section on a
+  // Nothing saved yet in this browser - don't show an empty section on a
   // fresh visit or in server-rendered markup.
   if (!loaded || entries.length === 0) return null;
 

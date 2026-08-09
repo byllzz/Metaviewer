@@ -46,11 +46,11 @@ export function ResultTabs({
   return (
     <div
       ref={containerRef}
-      className="relative flex items-center gap-1 mb-8 flex-wrap rounded-xl border border-border bg-surface p-1.5 overflow-x-auto hide-scrollbar"
+      className="relative flex items-center justify-between gap-1 mb-5 flex-wrap rounded-[8px] border border-border bg-surface px-0.5 overflow-x-auto hide-scrollbar"
     >
       {indicator && (
         <div
-          className="absolute top-1.5 bottom-1.5 rounded-lg bg-fg text-background transition-all duration-300 ease-out"
+          className="absolute top-1.5 bottom-1.5 rounded-[5px] bg-fg text-background transition-all duration-300 ease-out"
           style={{ left: indicator.left, width: indicator.width }}
         />
       )}
@@ -63,7 +63,7 @@ export function ResultTabs({
               btnRefs.current[tab.id] = el;
             }}
             onClick={() => onChange(tab.id)}
-            className={`relative z-10 flex items-center gap-2 px-3.5 h-9 rounded-lg text-sm whitespace-nowrap transition-colors duration-300 ${
+            className={`relative z-10 flex items-center justify-center gap-2.5 w-[130px] h-11 rounded-[5px] text-sm whitespace-nowrap transition-colors duration-300 ${
               isActive ? "text-background" : "text-muted hover:text-fg"
             }`}
           >

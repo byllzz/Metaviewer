@@ -33,7 +33,7 @@ export function FixSnippets({ result }: { result: AnalysisResult }) {
       </div>
       <p className="text-sm text-muted mb-4">
         {issueCount > 0
-          ? `Ready-to-use tags for your framework — filled in with what we found, with sensible defaults for the ${issueCount} check${issueCount === 1 ? "" : "s"} that need attention.`
+          ? `Ready-to-use tags for your framework - filled in with what we found, with sensible defaults for the ${issueCount} check${issueCount === 1 ? "" : "s"} that need attention.`
           : "Your tags already look solid. Here's the equivalent code for reference."}
       </p>
 

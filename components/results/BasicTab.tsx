@@ -147,7 +147,7 @@ export function BasicTab({ result }: { result: AnalysisResult }) {
           <p className="text-xs text-muted px-4 py-2 tab-panel">
             {meta.robotsTxt.found
               ? `Found at ${new URL(meta.finalUrl).origin}/robots.txt.`
-              : "No robots.txt was found at the site root — crawlers will assume everything is allowed."}
+              : "No robots.txt was found at the site root - crawlers will assume everything is allowed."}
           </p>
         )}
 

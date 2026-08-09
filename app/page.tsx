@@ -39,7 +39,7 @@ const FEATURES = [
   {
     icon: ImageIcon,
     title: "Real Image Analysis",
-    body: "Decoded image dimensions, file size, aspect ratio, and how it fits each platform — not just declared meta tags.",
+    body: "Decoded image dimensions, file size, aspect ratio, and how it fits each platform - not just declared meta tags.",
   },
   {
     icon: FileJson,
@@ -72,7 +72,7 @@ const STEPS = [
   {
     icon: Link2,
     title: "Paste a URL",
-    body: "Drop in any public link — your homepage, a blog post, a product page.",
+    body: "Drop in any public link - your homepage, a blog post, a product page.",
   },
   {
     icon: ScanSearch,
@@ -95,21 +95,24 @@ export default function HomePage() {
         <span className="text-xs px-3 py-1 rounded-full border border-border text-muted mb-6">
           Free &amp; Open Source
         </span>
-        <h1 className="font-serif text-4xl sm:text-5xl leading-tight max-w-3xl">
+        <h1 className="font-serif text-4xl sm:text-6xl leading-tightest tracking-tight max-w-3xl">
           Your link previews are broken.{" "}
           <span className="text-accent block sm:inline">
             Find out why in seconds
           </span>
         </h1>
 
-        <div id="analyze" className="mt-9 w-full flex justify-center scroll-mt-24">
+        <div
+          id="analyze"
+          className="mt-9 w-full flex justify-center scroll-mt-24"
+        >
           <AnalyzeForm />
         </div>
       </section>
 
       <RecentAnalysis />
 
-      <section className="px-6 py-14 border-t border-border/60">
+      <section className="px-6 py-24 border-t border-border/60">
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
           {STEPS.map((step, i) => (
             <div key={step.title} className="relative text-center sm:text-left">
@@ -117,13 +120,19 @@ export default function HomePage() {
                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-accent sm:mb-4">
                   <step.icon size={18} />
                 </span>
-                <span className="text-xs text-muted font-mono sm:hidden">0{i + 1}</span>
+                <span className="text-xs text-muted font-mono sm:hidden">
+                  0{i + 1}
+                </span>
               </div>
               <h3 className="font-medium mt-3 sm:mt-0">
-                <span className="hidden sm:inline text-muted font-mono text-xs mr-2">0{i + 1}</span>
+                <span className="hidden sm:inline text-muted font-mono text-xs mr-2">
+                  0{i + 1}
+                </span>
                 {step.title}
               </h3>
-              <p className="text-sm text-muted leading-relaxed mt-1.5">{step.body}</p>
+              <p className="text-sm text-muted leading-relaxed mt-1.5">
+                {step.body}
+              </p>
             </div>
           ))}
         </div>
@@ -131,8 +140,8 @@ export default function HomePage() {
 
       <section className="px-6 py-14 bg-grid border-t border-border/60">
         <p className="max-w-2xl mx-auto text-center text-muted mb-10">
-          Metaviewer goes beyond basic meta tag checking. Get detailed
-          analysis, actionable fixes, and beautiful previews.
+          Metaviewer goes beyond basic meta tag checking. Get detailed analysis,
+          actionable fixes, and beautiful previews.
         </p>
 
         <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-xl overflow-hidden border border-border">
@@ -148,7 +157,9 @@ export default function HomePage() {
 
       <section className="px-6 py-14 border-t border-border/60">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-muted mb-8">Checked against every major platform</h2>
+          <h2 className="text-muted mb-8">
+            Checked against every major platform
+          </h2>
           <div className="flex flex-wrap justify-center gap-2.5">
             {PLATFORMS.map((p) => (
               <span
@@ -162,23 +173,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="px-6 py-16 border-t border-border/60">
-        <div className="max-w-2xl mx-auto text-center rounded-2xl border border-border bg-surface px-8 py-12">
-          <h2 className="font-serif text-2xl sm:text-3xl mb-3">
-            Ready to see your link previews?
-          </h2>
-          <p className="text-muted mb-8">
-            Free, no account required. Results in seconds.
-          </p>
-          <a
-            href="#analyze"
-            className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-accent text-black font-medium text-sm hover:bg-accent-light transition-colors"
-          >
-            Analyze a URL
-          </a>
-        </div>
-      </section>
-
       <section className="px-6 pb-24">
         <h2 className="text-center text-muted mb-8">
           Everything you need to know about Metaviewer.
@@ -188,7 +182,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="mt-auto border-t border-border/60 px-8 py-10">
+
+      <footer className="mt-auto w-full max-w-[1150px] mx-auto border-t border-border/60 px-8 py-10">
         <div className="flex items-start justify-between flex-wrap gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -198,13 +193,12 @@ export default function HomePage() {
               <span className="font-serif text-lg">Metaviewer</span>
             </div>
             <p className="text-sm text-muted max-w-xs">
-              See what matters in your website, with clear, actionable
-              insights.
+              See what matters in your website, with clear, actionable insights.
             </p>
           </div>
           <div className="flex gap-2">
             <a
-              href="https://github.com"
+              href="https://github.com/byllzz/Metaviewer"
               target="_blank"
               rel="noreferrer"
               className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg transition-colors"
@@ -212,7 +206,7 @@ export default function HomePage() {
               <Github size={16} />
             </a>
             <a
-              href="https://twitter.com"
+              href="https://twitter.com/bilalmlkdev"
               target="_blank"
               rel="noreferrer"
               className="h-9 w-9 flex items-center justify-center rounded-md border border-border text-muted hover:text-fg transition-colors"
@@ -221,7 +215,20 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-        <p className="text-xs text-muted mt-10">
+        <div
+          className="flex items-center justify-center pointer-events-none select-none leading-[1]"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 40%, transparent 90%)",
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 40%, transparent 90%)",
+          }}
+        >
+          <span className="text-[80px] sm:text-[120px] md:text-[200px] font-extrabold font-DM tracking-tighter text-gray-200">
+            Metaviewer
+          </span>
+        </div>
+        <p className="text-xs text-muted mt-6">
           © {new Date().getFullYear()} Metaviewer. All rights reserved.
         </p>
       </footer>

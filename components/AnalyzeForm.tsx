@@ -25,18 +25,18 @@ export function AnalyzeForm() {
           e.preventDefault();
           submit(url);
         }}
-        className="flex items-center gap-3 w-full max-w-2xl"
+        className="flex items-center gap-3 w-full max-w-4xl"
       >
         <input
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Enter any URL to analyze…"
-          className="flex-1 h-12 rounded-lg bg-fg/5 border border-border px-4 text-sm placeholder:text-muted focus:outline-none focus:border-accent/60 transition-colors"
+          className="flex-1 h-10  rounded-lg bg-fg/5 border border-border px-4 text-sm placeholder:text-muted focus:outline-none focus:border-accent/60 transition-colors"
         />
         <button
           type="submit"
           disabled={navigating}
-          className="h-12 shrink-0 px-5 rounded-lg bg-accent text-black font-medium text-sm flex items-center gap-2 hover:bg-accent-light transition-colors disabled:opacity-60"
+          className="h-10 shrink-0 px-7 rounded-[5px] bg-accent text-black font-medium text-sm flex items-center gap-2 hover:bg-accent-light transition-colors disabled:opacity-60"
         >
           {navigating ? (
             <Loader2 size={16} className="animate-spin" />

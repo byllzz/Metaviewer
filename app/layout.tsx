@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Metaviewer – Your link previews are broken. Find out why.",
+  title: "Metaviewer - Your link previews are broken. Find out why.",
   description:
     "Analyze your website's Open Graph tags, Twitter Cards, and meta tags. See exactly how your links preview on Google, X, LinkedIn, Discord, Slack, WhatsApp, Telegram, Facebook, and iMessage.",
 };
@@ -33,6 +33,7 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
       </head>
       <body className="bg-background text-fg font-sans antialiased min-h-screen transition-colors">
         {children}

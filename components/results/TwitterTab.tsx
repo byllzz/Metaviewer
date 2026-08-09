@@ -6,7 +6,7 @@ import { StatusIcon } from "@/components/results/StatusIcon";
 import { CodeFixBlock } from "@/components/results/CodeFixBlock";
 
 const REQUIRED: { key: string; label: string; desc: string; fallback?: string }[] = [
-  { key: "twitter:card", label: "twitter:card", desc: "The card type — summary or summary_large_image." },
+  { key: "twitter:card", label: "twitter:card", desc: "The card type - summary or summary_large_image." },
   { key: "twitter:title", label: "twitter:title", desc: "Falls back to og:title if not set.", fallback: "og:title" },
   { key: "twitter:description", label: "twitter:description", desc: "Falls back to og:description if not set.", fallback: "og:description" },
   { key: "twitter:image", label: "twitter:image", desc: "Falls back to og:image if not set.", fallback: "og:image" },

@@ -34,7 +34,7 @@ function statusFrom(
 }
 
 const CHECKS: CheckDef[] = [
-  // ---- Essential (25 pts) ----
+  //  Essential (25 pts)
   {
     id: "title-present",
     label: "Title tag present",
@@ -52,7 +52,7 @@ const CHECKS: CheckDef[] = [
       const len = m.title?.length ?? 0;
       if (!m.title) return { status: "error", message: "No title to measure." };
       if (len >= 15 && len <= 60)
-        return { status: "pass", message: `Title is ${len} characters — a good length.` };
+        return { status: "pass", message: `Title is ${len} characters - a good length.` };
       return {
         status: "warning",
         message: `Title is ${len} characters. Aim for 15–60 for best display.`,
@@ -80,7 +80,7 @@ const CHECKS: CheckDef[] = [
       const len = m.description?.length ?? 0;
       if (!m.description) return { status: "error", message: "No description to measure." };
       if (len >= 50 && len <= 160)
-        return { status: "pass", message: `Description is ${len} characters — good length.` };
+        return { status: "pass", message: `Description is ${len} characters - good length.` };
       return {
         status: "warning",
         message: `Description is ${len} characters. Aim for 50–160.`,
@@ -118,7 +118,7 @@ const CHECKS: CheckDef[] = [
     evaluate: (m) => statusFrom(!!m.viewport, "Viewport tag found.", m.viewport),
   },
 
-  // ---- Open Graph (20 pts) ----
+  //  Open Graph (20 pts)
   {
     id: "og-title",
     label: "og:title present",
@@ -140,7 +140,7 @@ const CHECKS: CheckDef[] = [
     category: "opengraph",
     weight: 5,
     evaluate: (m) =>
-      statusFrom(!!m.og["og:image"], m.og["og:image"] ? "og:image present." : "Missing og:image — most platforms need this for a rich preview.", m.og["og:image"]),
+      statusFrom(!!m.og["og:image"], m.og["og:image"] ? "og:image present." : "Missing og:image - most platforms need this for a rich preview.", m.og["og:image"]),
   },
   {
     id: "og-url",
@@ -182,14 +182,14 @@ const CHECKS: CheckDef[] = [
     },
   },
 
-  // ---- Twitter / X (15 pts) ----
+  //  Twitter / X (15 pts)
   {
     id: "twitter-card",
     label: "twitter:card present",
     category: "twitter",
     weight: 5,
     evaluate: (m) =>
-      statusFrom(!!m.twitter["twitter:card"], m.twitter["twitter:card"] ? `twitter:card is "${m.twitter["twitter:card"]}".` : "Missing twitter:card — X will fall back to a plain link.", m.twitter["twitter:card"]),
+      statusFrom(!!m.twitter["twitter:card"], m.twitter["twitter:card"] ? `twitter:card is "${m.twitter["twitter:card"]}".` : "Missing twitter:card - X will fall back to a plain link.", m.twitter["twitter:card"]),
   },
   {
     id: "twitter-title",
@@ -229,7 +229,7 @@ const CHECKS: CheckDef[] = [
     evaluate: (m) => statusFrom(!!m.twitter["twitter:site"], m.twitter["twitter:site"] ? "twitter:site present." : "Missing twitter:site (optional attribution).", m.twitter["twitter:site"]),
   },
 
-  // ---- Images (20 pts) ----
+  //  Images (20 pts)
   {
     id: "image-loads",
     label: "og:image is reachable",
@@ -251,7 +251,7 @@ const CHECKS: CheckDef[] = [
       if (!bytes) return { status: "warning", message: "Couldn't determine image file size." };
       const kb = Math.round(bytes / 1024);
       if (kb <= 5000) return { status: "pass", message: `Image is ${kb} KB.` };
-      return { status: "warning", message: `Image is ${kb} KB — consider compressing (5MB is the practical limit for most platforms).` };
+      return { status: "warning", message: `Image is ${kb} KB - consider compressing (5MB is the practical limit for most platforms).` };
     },
   },
   {
@@ -261,7 +261,7 @@ const CHECKS: CheckDef[] = [
     weight: 4,
     evaluate: (m) => {
       const { width, height } = m.ogImage ?? {};
-      if (!width || !height) return { status: "warning", message: "Image dimensions unknown — declare og:image:width/height." };
+      if (!width || !height) return { status: "warning", message: "Image dimensions unknown - declare og:image:width/height." };
       const ratio = width / height;
       const target = 1.91;
       if (Math.abs(ratio - target) < 0.25)
@@ -282,7 +282,7 @@ const CHECKS: CheckDef[] = [
     },
   },
 
-  // ---- Technical (11 pts) ----
+  //  Technical (11 pts)
   {
     id: "https",
     label: "Served over HTTPS",
@@ -304,7 +304,7 @@ const CHECKS: CheckDef[] = [
     weight: 3,
     evaluate: (m) => {
       const blocked = /noindex/i.test(m.robots ?? "");
-      return statusFrom(!blocked, blocked ? "Page is marked noindex — some crawlers may skip preview generation." : "Page is indexable.");
+      return statusFrom(!blocked, blocked ? "Page is marked noindex - some crawlers may skip preview generation." : "Page is indexable.");
     },
   },
   {
@@ -320,7 +320,7 @@ const CHECKS: CheckDef[] = [
     category: "technical",
     weight: 2,
     evaluate: (m) =>
-      statusFrom(!m.redirected, m.redirected ? "URL redirects before resolving — point tags at the final URL." : "URL resolves directly without redirects."),
+      statusFrom(!m.redirected, m.redirected ? "URL redirects before resolving - point tags at the final URL." : "URL resolves directly without redirects."),
   },
   {
     id: "response-time",
@@ -330,7 +330,7 @@ const CHECKS: CheckDef[] = [
     evaluate: (m) => {
       if (m.loadTimeMs <= 800) return { status: "pass", message: `Page responds quickly (${m.loadTimeMs}ms).` };
       if (m.loadTimeMs <= 2000) return { status: "warning", message: `Page took ${m.loadTimeMs}ms to respond.` };
-      return { status: "error", message: `Page took ${m.loadTimeMs}ms to respond — slow crawlers may time out.` };
+      return { status: "error", message: `Page took ${m.loadTimeMs}ms to respond - slow crawlers may time out.` };
     },
   },
   {
@@ -355,13 +355,13 @@ const CHECKS: CheckDef[] = [
     },
   },
 
-  // ---- Extras (10 pts) ----
+  //  Extras (10 pts)
   {
     id: "og-image-alt",
     label: "og:image:alt present",
     category: "extras",
     weight: 3,
-    evaluate: (m) => statusFrom(!!m.og["og:image:alt"], m.og["og:image:alt"] ? "og:image:alt present — good for accessibility." : "Missing og:image:alt.", m.og["og:image:alt"]),
+    evaluate: (m) => statusFrom(!!m.og["og:image:alt"], m.og["og:image:alt"] ? "og:image:alt present - good for accessibility." : "Missing og:image:alt.", m.og["og:image:alt"]),
   },
   {
     id: "twitter-image-alt",
@@ -393,7 +393,7 @@ const CHECKS: CheckDef[] = [
     label: "Author meta present",
     category: "extras",
     weight: 1,
-    evaluate: (m) => statusFrom(!!m.author, m.author ? "Author meta tag found." : "No author meta — useful for content attribution.", m.author),
+    evaluate: (m) => statusFrom(!!m.author, m.author ? "Author meta tag found." : "No author meta - useful for content attribution.", m.author),
   },
   {
     id: "content-type-header",
@@ -412,7 +412,7 @@ const CHECKS: CheckDef[] = [
         m.structuredData.found,
         m.structuredData.found
           ? `JSON-LD found (${m.structuredData.types.join(", ") || "unnamed type"}).`
-          : "No JSON-LD structured data found — it can improve rich search results.",
+          : "No JSON-LD structured data found - it can improve rich search results.",
         m.structuredData.types.join(", ") || undefined
       ),
   },
@@ -422,9 +422,9 @@ const CHECKS: CheckDef[] = [
     category: "extras",
     weight: 2,
     evaluate: (m) => {
-      if (!m.title || !m.description) return { status: "warning", message: "Can't compare — one is missing." };
+      if (!m.title || !m.description) return { status: "warning", message: "Can't compare - one is missing." };
       const same = m.title.trim().toLowerCase() === m.description.trim().toLowerCase();
-      return statusFrom(!same, same ? "Title and description are identical — consider differentiating them." : "Title and description are distinct.");
+      return statusFrom(!same, same ? "Title and description are identical - consider differentiating them." : "Title and description are distinct.");
     },
   },
 ];
