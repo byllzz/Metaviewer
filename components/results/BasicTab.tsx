@@ -172,6 +172,16 @@ export function BasicTab({ result }: { result: AnalysisResult }) {
           </p>
         )}
 
+        <div className="flex items-center justify-between mt-2 px-4 py-3 rounded-lg border border-border bg-background text-sm">
+          <span className="flex items-center gap-2">
+            <StatusIcon status={meta.structuredData.found ? "pass" : "warning"} />
+            Structured data (JSON-LD)
+          </span>
+          <span className="text-xs px-2 py-0.5 rounded-md bg-accent/15 text-accent">
+            {meta.structuredData.found ? meta.structuredData.types.join(", ") || "Found" : "Not found"}
+          </span>
+        </div>
+
         <div className="mt-4">
           <p className="text-sm font-medium mb-2">Security Headers</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm">

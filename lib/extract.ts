@@ -1,8 +1,21 @@
 import * as cheerio from "cheerio";
-import type { ExtractedMeta, ImageInfo, RawTag, RobotsTxtInfo, SitemapInfo } from "@/types";
+import type {
+  ExtractedMeta,
+  ImageInfo,
+  RawTag,
+  RobotsTxtInfo,
+  SitemapInfo,
+  StructuredDataInfo,
+} from "@/types";
+import { probeImageDimensions } from "@/lib/imageDimensions";
 
 const USER_AGENT =
   "Mozilla/5.0 (compatible; MetaviewBot/1.0; +https://metaview.app/bot)";
+
+// Enough header bytes to reach the SOF marker in the vast majority of real-world
+// JPEGs (which usually front-load EXIF/ICC before the frame header) without
+// downloading the whole file.
+const IMAGE_PROBE_BYTES = 256 * 1024;
 
 export class FetchError extends Error {
   constructor(message: string) {
@@ -30,15 +43,38 @@ function isPrivateHost(hostname: string): boolean {
   return false;
 }
 
-async function fetchHead(url: string): Promise<ImageInfo | undefined> {
+/**
+ * Fetches just enough of an image to determine its real pixel dimensions
+ * (via lib/imageDimensions.ts) without downloading the whole file. Falls
+ * back gracefully to content-length/content-type only if the server ignores
+ * Range requests or the format can't be probed from a partial read.
+ */
+async function probeImage(url: string): Promise<ImageInfo | undefined> {
   try {
-    const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(8000) });
+    const res = await fetch(url, {
+      headers: { "User-Agent": USER_AGENT, Range: `bytes=0-${IMAGE_PROBE_BYTES - 1}` },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok && res.status !== 206) return undefined;
+
     const contentType = res.headers.get("content-type") ?? undefined;
-    const len = res.headers.get("content-length");
+    const contentRange = res.headers.get("content-range"); // e.g. "bytes 0-262143/512000"
+    const totalFromRange = contentRange ? Number(contentRange.split("/")[1]) : undefined;
+    const contentLength = res.headers.get("content-length");
+
+    const arrayBuf = await res.arrayBuffer();
+    const buf = Buffer.from(arrayBuf);
+    const probed = probeImageDimensions(buf);
+
+    const bytes = totalFromRange ?? (contentLength ? Number(contentLength) : buf.length);
+
     return {
       url,
-      contentType,
-      bytes: len ? Number(len) : undefined,
+      width: probed?.width,
+      height: probed?.height,
+      dimensionsDecoded: !!probed,
+      bytes,
+      contentType: contentType ?? (probed ? `image/${probed.format}` : undefined),
     };
   } catch {
     return undefined;
@@ -73,6 +109,36 @@ async function checkSitemap(origin: string): Promise<SitemapInfo> {
   } catch {
     return { checked: true, found: false };
   }
+}
+
+function extractStructuredData($: cheerio.CheerioAPI): StructuredDataInfo {
+  const types: string[] = [];
+  let found = false;
+
+  $('script[type="application/ld+json"]').each((_, el) => {
+    const raw = $(el).contents().text();
+    if (!raw?.trim()) return;
+    try {
+      const parsed = JSON.parse(raw);
+      const nodes = Array.isArray(parsed) ? parsed : [parsed];
+      for (const node of nodes) {
+        const graph = node?.["@graph"] ?? [node];
+        for (const item of Array.isArray(graph) ? graph : [graph]) {
+          const t = item?.["@type"];
+          if (!t) continue;
+          found = true;
+          const list = Array.isArray(t) ? t : [t];
+          for (const name of list) {
+            if (typeof name === "string" && !types.includes(name)) types.push(name);
+          }
+        }
+      }
+    } catch {
+      // Malformed JSON-LD — ignore this block, keep scanning others.
+    }
+  });
+
+  return { checked: true, found, types };
 }
 
 export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
@@ -157,28 +223,35 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
   const keywords = getMeta('meta[name="keywords"]');
   const generator = getMeta('meta[name="generator"]');
 
-  let ogImage: ImageInfo | undefined;
   const ogImageUrl = og["og:image:secure_url"] || og["og:image"];
-  if (ogImageUrl) {
-    const absolute = new URL(ogImageUrl, finalUrl).toString();
-    const head = await fetchHead(absolute);
-    const width = og["og:image:width"] ? Number(og["og:image:width"]) : undefined;
-    const height = og["og:image:height"]
-      ? Number(og["og:image:height"])
-      : undefined;
+  const ogImageAbsolute = ogImageUrl ? new URL(ogImageUrl, finalUrl).toString() : undefined;
+
+  const [robotsTxt, sitemap, probedOgImage, probedFavicon, probedAppleTouchIcon] =
+    await Promise.all([
+      checkRobotsTxt(origin),
+      checkSitemap(origin),
+      ogImageAbsolute ? probeImage(ogImageAbsolute) : Promise.resolve(undefined),
+      probeImage(favicon),
+      appleTouchIcon ? probeImage(appleTouchIcon) : Promise.resolve(undefined),
+    ]);
+
+  // Prefer real decoded pixel dimensions; fall back to the site's own
+  // og:image:width/height declaration if we couldn't decode the bytes.
+  let ogImage: ImageInfo | undefined;
+  if (ogImageAbsolute) {
+    const declaredWidth = og["og:image:width"] ? Number(og["og:image:width"]) : undefined;
+    const declaredHeight = og["og:image:height"] ? Number(og["og:image:height"]) : undefined;
     ogImage = {
-      url: absolute,
-      width,
-      height,
-      bytes: head?.bytes,
-      contentType: head?.contentType,
+      url: ogImageAbsolute,
+      width: probedOgImage?.width ?? declaredWidth,
+      height: probedOgImage?.height ?? declaredHeight,
+      dimensionsDecoded: !!probedOgImage?.dimensionsDecoded,
+      bytes: probedOgImage?.bytes,
+      contentType: probedOgImage?.contentType,
     };
   }
 
-  const [robotsTxt, sitemap] = await Promise.all([
-    checkRobotsTxt(origin),
-    checkSitemap(origin),
-  ]);
+  const structuredData = extractStructuredData($);
 
   const securityHeaders = {
     hsts: res.headers.has("strict-transport-security"),
@@ -239,6 +312,9 @@ export async function extractMeta(rawUrl: string): Promise<ExtractedMeta> {
     securityHeaders,
     robotsTxt,
     sitemap,
+    structuredData,
+    faviconInfo: probedFavicon,
+    appleTouchIconInfo: probedAppleTouchIcon,
     rawTags,
   };
 }

@@ -6,6 +6,7 @@ import type {
   Grade,
   MetaCheck,
 } from "@/types";
+import { CHECK_FIXES } from "@/lib/checkFixes";
 
 interface CheckDef {
   id: string;
@@ -402,6 +403,20 @@ const CHECKS: CheckDef[] = [
     evaluate: (m) => statusFrom(!!m.contentType, m.contentType ? `Content-Type header: ${m.contentType}.` : "No Content-Type response header detected."),
   },
   {
+    id: "structured-data",
+    label: "Structured data (JSON-LD) present",
+    category: "extras",
+    weight: 2,
+    evaluate: (m) =>
+      statusFrom(
+        m.structuredData.found,
+        m.structuredData.found
+          ? `JSON-LD found (${m.structuredData.types.join(", ") || "unnamed type"}).`
+          : "No JSON-LD structured data found — it can improve rich search results.",
+        m.structuredData.types.join(", ") || undefined
+      ),
+  },
+  {
     id: "duplicate-title-desc",
     label: "Title and description are distinct",
     category: "extras",
@@ -446,6 +461,7 @@ export function analyze(meta: ExtractedMeta, id: string): AnalysisResult {
       label: def.label,
       category: def.category,
       ...result,
+      fix: result.status !== "pass" ? CHECK_FIXES[def.id] : undefined,
     };
   });
 

@@ -37,6 +37,7 @@ function ImageCard({
   format,
   bytes,
   alt,
+  dimsNote,
   issues,
 }: {
   title: string;
@@ -44,6 +45,7 @@ function ImageCard({
   src?: string;
   url?: string;
   dims?: string;
+  dimsNote?: string;
   format?: string;
   bytes?: string;
   alt?: string;
@@ -70,6 +72,7 @@ function ImageCard({
         <div>
           <p className="text-xs text-muted">Dimensions</p>
           <p>{dims ?? "Unknown"}</p>
+          {dimsNote && <p className="text-[11px] text-muted/70 mt-0.5">{dimsNote}</p>}
         </div>
         <div>
           <p className="text-xs text-muted">Format</p>
@@ -112,7 +115,6 @@ export function ImagesTab({ result }: { result: AnalysisResult }) {
   const { meta } = result;
   const img = meta.ogImage;
   const kb = img?.bytes ? Math.round(img.bytes / 1024) : undefined;
-  const aspect = img?.width && img.height ? (img.width / img.height).toFixed(2) : undefined;
 
   const ogIssues: string[] = [];
   if (kb && kb > 100) ogIssues.push(`File size (${kb} KB) exceeds 100KB recommendation`);
@@ -128,6 +130,7 @@ export function ImagesTab({ result }: { result: AnalysisResult }) {
             src={meta.og["og:image"]}
             url={img?.url}
             dims={img?.width && img.height ? `${img.width} × ${img.height}` : undefined}
+            dimsNote={img?.width && img.height ? (img.dimensionsDecoded ? "Decoded from image" : "From og:image:width/height") : undefined}
             format={img?.contentType?.split("/")[1]?.toUpperCase()}
             bytes={kb ? `${kb} KB` : undefined}
             alt={meta.og["og:image:alt"]}
@@ -139,10 +142,26 @@ export function ImagesTab({ result }: { result: AnalysisResult }) {
           badge={{ label: "Good", tone: "good" }}
           src={meta.favicon}
           url={meta.favicon}
+          dims={meta.faviconInfo?.width && meta.faviconInfo.height ? `${meta.faviconInfo.width} × ${meta.faviconInfo.height}` : undefined}
+          format={meta.faviconInfo?.contentType?.split("/")[1]?.toUpperCase()}
+          bytes={meta.faviconInfo?.bytes ? `${Math.round(meta.faviconInfo.bytes / 1024)} KB` : undefined}
           alt={meta.favicon ? "Set" : undefined}
         />
         {meta.appleTouchIcon && (
-          <ImageCard title="Apple Touch Icon" badge={{ label: "Good", tone: "good" }} src={meta.appleTouchIcon} url={meta.appleTouchIcon} alt="Set" />
+          <ImageCard
+            title="Apple Touch Icon"
+            badge={{ label: "Good", tone: "good" }}
+            src={meta.appleTouchIcon}
+            url={meta.appleTouchIcon}
+            dims={
+              meta.appleTouchIconInfo?.width && meta.appleTouchIconInfo.height
+                ? `${meta.appleTouchIconInfo.width} × ${meta.appleTouchIconInfo.height}`
+                : undefined
+            }
+            format={meta.appleTouchIconInfo?.contentType?.split("/")[1]?.toUpperCase()}
+            bytes={meta.appleTouchIconInfo?.bytes ? `${Math.round(meta.appleTouchIconInfo.bytes / 1024)} KB` : undefined}
+            alt="Set"
+          />
         )}
       </div>
 

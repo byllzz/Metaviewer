@@ -7,3 +7,5 @@ npm-debug.log*
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+AI_HANDOFF.md
+.vscode

@@ -40,7 +40,7 @@ function CheckRow({ check }: { check: MetaCheck }) {
         <div className="pb-4 pl-7 tab-panel">
           <div className="rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-muted">
             <span className="text-fg font-medium">How to fix: </span>
-            {check.message}
+            {check.fix ?? check.message}
           </div>
         </div>
       )}

@@ -15,6 +15,8 @@ export interface MetaCheck {
   status: CheckStatus;
   message: string;
   value?: string;
+  /** Actionable fix shown in the Score tab when status !== "pass". */
+  fix?: string;
 }
 
 export interface CategoryScore {
@@ -28,8 +30,16 @@ export interface ImageInfo {
   url: string;
   width?: number;
   height?: number;
+  /** True when width/height were decoded from the actual image bytes rather than an og:image:width/height tag. */
+  dimensionsDecoded?: boolean;
   bytes?: number;
   contentType?: string;
+}
+
+export interface StructuredDataInfo {
+  checked: boolean;
+  found: boolean;
+  types: string[];
 }
 
 export interface SecurityHeaders {
@@ -87,6 +97,9 @@ export interface ExtractedMeta {
   securityHeaders: SecurityHeaders;
   robotsTxt: RobotsTxtInfo;
   sitemap: SitemapInfo;
+  structuredData: StructuredDataInfo;
+  faviconInfo?: ImageInfo;
+  appleTouchIconInfo?: ImageInfo;
   rawTags: RawTag[];
 }
 
