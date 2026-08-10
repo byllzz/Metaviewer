@@ -2,9 +2,6 @@
   <a href="https://metaviewer.vercel.app/">
     <img src="./public/preview.png" alt="Metaviewer Preview">
   </a>
-   <!-- <a href="https://metaviewer.vercel.app/">
-    <img src="./public/resultPagePreview.png" alt="Metaviewer Preview">
-  </a> -->
 </p>
 
 <!-- Dark theme (will show when GitHub is in Dark mode) -->
@@ -211,9 +208,9 @@ SOFTWARE.
 
 ## Author
 
-<img src="https://github.com/byllzz.png" width="80" height="80" alt="Dev Prasad Sethi" />
+<img src="https://github.com/byllzz.png" width="80" height="80" alt="Bilal Malik" />
 
-### Dev Prasad Sethi
+### Bilal Malik
 
 [![Twitter](https://img.shields.io/badge/@bilalmlkdev-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://x.com/bilalmlkdev)
 [![GitHub](https://img.shields.io/badge/byllzz-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/byllzz)
